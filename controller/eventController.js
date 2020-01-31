@@ -9,7 +9,7 @@ let Event = require('../model/event');
 // add new event
 eventController.route('/event/add').post((req, res)=>{
     let newEvent = new Event(req.body);
-    newEvent.save().then(newEvent => {
+    newEvent.save().then((newEvent) => {
             res.status(200).json(newEvent)
         }).catch(err => {
             res.status(400).send({ 'Could not create event': err });
@@ -32,10 +32,10 @@ eventController.route('/event/:id').get((req, res)=> {
         .populate('Events')
     eventQuery.exec((err, event)=> {
         if (err) {
-            res.json({'Message': 'cannot find event' })
+            res.json(`An error occured ${err}`);
         }
         else {
-            res.json(`No event found with id ${eventId}`);
+            res.json(event);
         }
     });
 });
@@ -53,6 +53,5 @@ eventController.route('/event/delete/:id').get((req, res)=>{
         }
     });
 });
-
 
 module.exports = eventController;

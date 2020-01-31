@@ -6,6 +6,8 @@ const express = require('express'),
     mongoose = require('mongoose'),
     DBconfig = require('./config/dbConfig'),
     eventController  = require('./controller/eventController');
+    studentController = require('./controller/studentController');
+    organizerController = require('./controller/organizerController');
 const app = express();
 const port = process.env.PORT || 4300;
 
@@ -23,6 +25,8 @@ mongoose.connect(DBconfig.ConnectionString,{useNewUrlParser:true,useUnifiedTopol
 mongoose.set('debug', true);
 
 app.use(eventController);
+app.use(studentController);
+app.use(organizerController);
 
 app.listen(port, ()=>{
     console.log('Listening on port ' + port);
