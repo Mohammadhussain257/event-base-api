@@ -11,6 +11,7 @@ const port = process.env.PORT || 4300;
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(require('body-parser').urlencoded({extended: false}));
 
 
 mongoose.Promise = global.Promise;
@@ -21,8 +22,8 @@ mongoose.connect(DBconfig.ConnectionString,{useNewUrlParser:true,useUnifiedTopol
 
 mongoose.set('debug', true);
 
-app.use('/events', eventController);
+app.use(eventController);
 
-app.listen(port, function(){
+app.listen(port, ()=>{
     console.log('Listening on port ' + port);
 });
