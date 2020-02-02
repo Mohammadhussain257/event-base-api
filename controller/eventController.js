@@ -35,7 +35,8 @@ eventController.route('/event/add').post(upload.single('eventImage'),(req, res)=
         eventImage: req.file.filename,
         eventName: req.body.eventName,
         eventDescription: req.body.eventDescription,
-        date: req.body.date
+        date: req.body.date,
+        Organizer_ID: req.body.Organizer_ID
     });
     newEvent.save().then((newEvent) => {
             res.status(200).json(newEvent)
@@ -57,15 +58,15 @@ eventController.route('/event/get').get((req,res)=>{
 eventController.route('/event/get/:id')
     .patch(upload.single('eventImage'),(req, res) => {
         let eventId = req.params.id;
-        // We want to upload a image to profile in a specified organizer id
+        // We want to upload a image to event in a specified organizer id
         Event.findOne({
             Event_ID: eventId
         }).then((event) => {
             if (event) {
-                // organizer object with the specified conditions was found
+                // event object with the specified conditions was found
                 return true;
             }
-            // else - the organizer object is undefined
+            // else - the event object is undefined
             return false;
         }).then((canUpdate) => {
             if (canUpdate) {
@@ -74,7 +75,8 @@ eventController.route('/event/get/:id')
                     eventImage: req.file.filename,
                     eventName: req.body.eventName,
                     eventDescription: req.body.eventDescription,
-                    date: req.body.date
+                    date: req.body.date,
+                    Organizer_ID: req.body.Organizer_ID
                 }).then(() => {
                     res.send({ message: 'updated'})
                 })
@@ -84,10 +86,30 @@ eventController.route('/event/get/:id')
         })
     });
 
+//get all events by organizer id
+eventController.route('/organizer/events/:id').get((req,res)=>{
+    let organizerId = req.params.id;
+    Event.find({Organizer_ID: organizerId}).then((events)=>{
+        res.status(200).json(events);
+    })
+        .catch((err)=>{
+            res.status(400).json('Cannot find event by organizer id');
+        })
+});
+// get single event by event id
+eventController.route('/get/event/:id').get((req, res)=>{
+    let eventId = req.params.id;
+    Event.find({ Event_ID: eventId }).then((events)=>{
+        res.status(200).json(events);
+    })
+        .catch((err)=>{
+            res.status(400).json('Cannot find event by organizer id');
+        })
+});
+
 //delete signle event by id
 eventController.route('/event/delete/:id').get((req, res)=>{
     let eventId = req.params.id;
-    console.log(eventId);
     Event.find({ Event_ID: eventId }).remove((err, event)=> {
         if (err) {
             res.json('Event not found');

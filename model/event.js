@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const autoIncrement = require('mongoose-sequence')(mongoose);
 const Schema = mongoose.Schema;
+const Organizer = require('./organizer');
 
 // Event Schema
 let Events = new Schema({
@@ -26,6 +27,9 @@ let Events = new Schema({
     date: {
         type: String,
         default: null,
+    },
+    Organizer_ID:{
+        type:Number
     }
 });
 
