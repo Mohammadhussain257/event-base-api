@@ -24,7 +24,7 @@ let Events = new Schema({
         trim:true,
     },
     date: {
-        type: Date,
+        type: String,
         default: null,
     }
 });
