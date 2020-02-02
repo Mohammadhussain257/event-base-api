@@ -28,7 +28,7 @@ let Organizer = new Schema({
         require:true,
         trim:true
     },
-    role:{
+    Role:{
         type:String,
         require:true
     }

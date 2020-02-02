@@ -8,8 +8,9 @@ const express = require('express'),
     eventController  = require('./controller/eventController');
     studentController = require('./controller/studentController');
     organizerController = require('./controller/organizerController');
-const app = express();
-const port = process.env.PORT || 4300;
+
+    const app = express();
+    const port = process.env.PORT || 4300;
 
 app.use(cors());
 app.use(bodyParser.json());

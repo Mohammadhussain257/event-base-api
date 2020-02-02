@@ -29,7 +29,7 @@ eventController.route('/event/get').get((req,res)=>{
 eventController.route('/event/:id').get((req, res)=> {
     let eventId = req.params.id;
     let eventQuery = Event.findOne({ Event_ID: eventId })
-        .populate('Events')
+        .populate('Events');
     eventQuery.exec((err, event)=> {
         if (err) {
             res.json(`An error occured ${err}`);
