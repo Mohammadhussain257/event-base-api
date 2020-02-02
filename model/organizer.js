@@ -15,6 +15,7 @@ let Organizer = new Schema({
     },
     email:{
         type:String,
+        unique:true,
         require: true,
         trim: true
     },
@@ -27,6 +28,9 @@ let Organizer = new Schema({
         type:String,
         require:true,
         trim:true
+    },
+    profilePicture:{
+        type: String
     },
     Role:{
         type:String,

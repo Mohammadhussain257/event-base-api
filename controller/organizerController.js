@@ -27,7 +27,8 @@ organizerController.route('/organizer/signup').post((req, res, next) => {
             email: req.body.email,
             venueName: req.body.venueName,
             Role: req.body.Role,
-            password:hash
+            password:hash,
+            profilePicture:req.body.profilePicture
         }).then((user) => {
             let token = jwt.sign({ _id: user._id }, jwtSecret);
             res.json({ status: "Signup success!", token: token });

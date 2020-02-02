@@ -8,6 +8,7 @@ const express = require('express'),
     eventController  = require('./controller/eventController');
     studentController = require('./controller/studentController');
     organizerController = require('./controller/organizerController');
+    uploadController = require('./controller/uploadController');
 
     const app = express();
     const port = process.env.PORT || 4300;
@@ -28,6 +29,7 @@ mongoose.set('debug', true);
 app.use(eventController);
 app.use(studentController);
 app.use(organizerController);
+app.use(uploadController);
 
 app.listen(port, ()=>{
     console.log('Listening on port ' + port);

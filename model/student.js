@@ -14,6 +14,7 @@ let Student = new Schema({
         },
         email: {
             type: String,
+            unique: true,
             require:true,
             trim:true
         },
@@ -41,6 +42,9 @@ let Student = new Schema({
             type: String,
             require: true
         },
+    profilePicture:{
+            type:String
+    },
         Role: {
             type: String,
             require:true,

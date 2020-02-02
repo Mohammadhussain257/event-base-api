@@ -30,6 +30,7 @@ studentController.route('/student/signup').post((req, res, next) => {
             year: req.body.year,
             password:hash,
             gender: req.body.gender,
+            profilePicture: req.body.profilePicture,
             Role: req.body.Role,
         }).then((user) => {
             let token = jwt.sign({ _id: user._id }, jwtSecret);
