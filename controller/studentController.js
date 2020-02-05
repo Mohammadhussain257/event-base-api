@@ -10,6 +10,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 
+const authenticate = require('../controller/verify');
 //more length of salt means more time require to decrypt make stronger hashing
 const saltRounds=10;
 //anything could be my secrete
@@ -17,6 +18,7 @@ const jwtSecret = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxy
 
 // student signup
 studentController.route('/student/signup').post((req, res, next) => {
+    console.log(req.body);
     let password = req.body.password;
     bcrypt.hash(password, saltRounds, (err, hash)=> {
         if (err) {
@@ -34,7 +36,7 @@ studentController.route('/student/signup').post((req, res, next) => {
             Role: req.body.Role,
         }).then((user) => {
             let token = jwt.sign({ _id: user._id }, jwtSecret);
-            res.json({ status: "Signup success!", token: token });
+            res.json({ status: "Signup success", token: token });
         }).catch(next);
     });
 });
@@ -52,15 +54,15 @@ studentController.route('/student/login').post((req, res, next) => {
                         if (!isCorrectPassowrd) {
                             res.status(401).send('Wrong password');
                         }
-                        let token = jwt.sign({ _id: user._id }, jwtSecret);
-                        res.json({ status: 'Login Successfully', token: token });
+                        let token = jwt.sign({ _id: user._id}, jwtSecret);
+                        res.json({ studentId : user.Student_ID, FullName : user.fullName, Email: user.email , token: token });
                     }).catch(next);
             }
         }).catch(next);
 });
 
 //get all student list
-studentController.route('/student/get').get((req,res)=>{
+studentController.route('/student/get').get(authenticate.verifyOrganizer,(req,res)=>{
     Student.find({}).then((students)=>{
         res.status(200).json(students);
     }).catch((err)=>{
@@ -69,7 +71,7 @@ studentController.route('/student/get').get((req,res)=>{
 });
 
 //get single student by id
-studentController.route('/student/:id').get((req, res)=> {
+studentController.route('/student/:id').get(authenticate.verifyStudent,(req, res)=> {
     let studentId = req.params.id;
     let studentQuery = Student.findOne({ Student_ID: studentId })
         .populate('Student');

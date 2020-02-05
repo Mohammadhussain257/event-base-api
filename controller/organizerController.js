@@ -38,7 +38,7 @@ organizerController.route('/organizer/signup').post((req, res, next) => {
     });
 });
 
-//user login
+//organizer login
 organizerController.route('/organizer/login').post((req, res, next) => {
     Organizer.findOne({ email: req.body.email })
         .then((user) => {
@@ -51,7 +51,7 @@ organizerController.route('/organizer/login').post((req, res, next) => {
                         if (!isCorrectPassowrd) {
                             res.status(401).send('Wrong password');
                         }
-                        let token = jwt.sign({ _id: user._id , organizerId: user.Organizer_ID}, jwtSecret);
+                        let token = jwt.sign({ _id: user._id }, jwtSecret);
                         res.json({ organizerId : user.Organizer_ID, FullName : user.fullName, Email: user.email , token: token });
                     }).catch(next);
             }

@@ -30,7 +30,8 @@ app.use(eventController);
 app.use(studentController);
 app.use(organizerController);
 app.use(uploadController);
-
+app.get('/home');
+console.log('App is running on server');
 app.listen(port, ()=>{
     console.log('Listening on port ' + port);
 });
