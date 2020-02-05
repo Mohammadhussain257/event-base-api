@@ -10,6 +10,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 
+const authenticate = require('../controller/verify');
+
 //more length of salt means more time require to decrypt make stronger hashing
 const saltRounds=10;
 //anything could be my secrete
@@ -49,15 +51,15 @@ organizerController.route('/organizer/login').post((req, res, next) => {
                         if (!isCorrectPassowrd) {
                             res.status(401).send('Wrong password');
                         }
-                        let token = jwt.sign({ _id: user._id }, jwtSecret);
-                        res.json({ status: 'Login Successfully', token: token });
+                        let token = jwt.sign({ _id: user._id , organizerId: user.Organizer_ID}, jwtSecret);
+                        res.json({ organizerId : user.Organizer_ID, FullName : user.fullName, Email: user.email , token: token });
                     }).catch(next);
             }
         }).catch(next);
 });
 
 //get all organizer list
-organizerController.route('/organizer/get').get((req,res)=>{
+organizerController.route('/organizer/get').get(authenticate.verifyOrganizer,(req,res)=>{
     Organizer.find({}).then((organizers)=>{
         res.status(200).json(organizers);
     }).catch((err)=>{
@@ -66,7 +68,7 @@ organizerController.route('/organizer/get').get((req,res)=>{
 });
 
 //get single student by id
-organizerController.route('/organizer/:id').get((req, res)=> {
+organizerController.route('/organizer/:id').get(authenticate.verifyOrganizer,(req, res)=> {
     let organizerId = req.params.id;
     let organizerQuery = Organizer.findOne({ Organizer_ID: organizerId })
         .populate('Organizer');
