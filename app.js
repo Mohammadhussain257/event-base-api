@@ -25,7 +25,8 @@ mongoose.connect(DBconfig.ConnectionString,{useNewUrlParser:true,useUnifiedTopol
 );
 
 mongoose.set('debug', true);
-
+app.use('/upload',express.static(__dirname+'/upload/profile'));
+app.use('/upload',express.static(__dirname+'/upload/event'));
 app.use(eventController);
 app.use(studentController);
 app.use(organizerController);

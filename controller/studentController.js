@@ -55,7 +55,8 @@ studentController.route('/student/login').post((req, res, next) => {
                             res.status(401).send('Wrong password');
                         }
                         let token = jwt.sign({ _id: user._id}, jwtSecret);
-                        res.json({ studentId : user.Student_ID, FullName : user.fullName, Email: user.email , token: token });
+                        res.json({ studentId : user.Student_ID, FullName : user.fullName,
+                            Email: user.email, Role: user.Role,ProfilePicture: user.profilePicture, token: token });
                     }).catch(next);
             }
         }).catch(next);

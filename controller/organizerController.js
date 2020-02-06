@@ -19,6 +19,7 @@ const jwtSecret = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxy
 
 // student signup
 organizerController.route('/organizer/signup').post((req, res, next) => {
+    console.log(req.body);
     let password = req.body.password;
     bcrypt.hash(password, saltRounds, (err, hash)=> {
         if (err) {
@@ -28,9 +29,9 @@ organizerController.route('/organizer/signup').post((req, res, next) => {
             fullName: req.body.fullName,
             email: req.body.email,
             venueName: req.body.venueName,
-            Role: req.body.Role,
             password:hash,
-            profilePicture:req.body.profilePicture
+            profilePicture:req.body.profilePicture,
+            Role: req.body.Role
         }).then((user) => {
             let token = jwt.sign({ _id: user._id }, jwtSecret);
             res.json({ status: "Signup success!", token: token });
@@ -52,7 +53,8 @@ organizerController.route('/organizer/login').post((req, res, next) => {
                             res.status(401).send('Wrong password');
                         }
                         let token = jwt.sign({ _id: user._id }, jwtSecret);
-                        res.json({ organizerId : user.Organizer_ID, FullName : user.fullName, Email: user.email , token: token });
+                        res.json({ organizerId : user.Organizer_ID, FullName : user.fullName,
+                            Email: user.email,Role: user.Role,ProfilePicture:user.profilePicture, token: token });
                     }).catch(next);
             }
         }).catch(next);
