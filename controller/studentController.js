@@ -86,4 +86,36 @@ studentController.route('/student/:id').get(authenticate.verifyStudent,(req, res
     });
 });
 
+// update student detail
+studentController.route('/update/profile/student/:id').patch((req, res) => {
+        console.log(req.body);
+        let studentId = req.params.id;
+        // update profile detail in a specified student id
+        Student.findOne({
+            Student_ID: studentId
+        }).then((student) => {
+            if (student) {
+                // student object with the specified conditions was found
+                return true;
+            }
+            // else - the student object is undefined
+            return false;
+        }).then((canUpdate) => {
+            if (canUpdate) {
+                Student.findOneAndUpdate({
+                    fullName: req.body.fullName,
+                    email: req.body.email,
+                    collegeName: req.body.collegeName,
+                    branch: req.body.branch,
+                    year: req.body.year,
+                    gender: req.body.gender
+                }).then(() => {
+                    res.send({ message: 'updated'})
+                })
+            } else {
+                res.sendStatus(404);
+            }
+        })
+    });
+
 module.exports = studentController;

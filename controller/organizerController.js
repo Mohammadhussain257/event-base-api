@@ -54,7 +54,8 @@ organizerController.route('/organizer/login').post((req, res, next) => {
                         }
                         let token = jwt.sign({ _id: user._id }, jwtSecret);
                         res.json({ organizerId : user.Organizer_ID, FullName : user.fullName,
-                            Email: user.email,Role: user.Role,ProfilePicture:user.profilePicture, token: token });
+                            Email: user.email,Role: user.Role,VenueName: user.velocityAngular,
+                            ProfilePicture:user.profilePicture, token: token });
                     }).catch(next);
             }
         }).catch(next);
@@ -82,6 +83,35 @@ organizerController.route('/organizer/:id').get(authenticate.verifyOrganizer,(re
             res.json(organizer);
         }
     });
+});
+
+// update organizer detail
+organizerController.route('/update/profile/organizer/:id').patch((req, res) => {
+    console.log(req.body);
+    let organizerId = req.params.id;
+    // update profile detail in a specified student id
+    Organizer.findOne({
+        Organizer_ID: organizerId
+    }).then((organizer) => {
+        if (organizer) {
+            // organizer object with the specified conditions was found
+            return true;
+        }
+        // else - the organizer object is undefined
+        return false;
+    }).then((canUpdate) => {
+        if (canUpdate) {
+            Organizer.findOneAndUpdate({
+                fullName: req.body.fullName,
+                email: req.body.email,
+                venueName: req.body.venueName,
+            }).then(() => {
+                res.send({ message: 'updated'})
+            })
+        } else {
+            res.sendStatus(404);
+        }
+    })
 });
 
 module.exports = organizerController;
