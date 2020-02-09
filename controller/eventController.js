@@ -55,12 +55,14 @@ eventController.route('/event/get').get((req,res)=>{
 });
 
 //get single event by id and update
-eventController.route('/event/get/:id')
+eventController.route('/event/:eventId/organizer/:organizerId')
     .patch(upload.single('eventImage'),(req, res) => {
-        let eventId = req.params.id;
+        let eventId = req.params.eventId
+        let organizerId = req.params.organizerId
         // We want to upload a image to event in a specified organizer id
         Event.findOne({
-            Event_ID: eventId
+            Event_ID: eventId,
+            Organizer_ID:organizerId
         }).then((event) => {
             if (event) {
                 // event object with the specified conditions was found
@@ -71,12 +73,10 @@ eventController.route('/event/get/:id')
         }).then((canUpdate) => {
             if (canUpdate) {
                 Event.findOneAndUpdate({
-                    Event_ID: eventId,
                     eventImage: req.file.filename,
                     eventName: req.body.eventName,
                     eventDescription: req.body.eventDescription,
-                    date: req.body.date,
-                    Organizer_ID: req.body.Organizer_ID
+                    date: req.body.date
                 }).then(() => {
                     res.send({ message: 'updated'})
                 })
@@ -108,7 +108,7 @@ eventController.route('/get/event/:id').get((req, res)=>{
 });
 
 //delete signle event by id
-eventController.route('/event/delete/:id').get((req, res)=>{
+eventController.route('/event/delete/:id').delete((req, res)=>{
     let eventId = req.params.id;
     Event.find({ Event_ID: eventId }).remove((err, event)=> {
         if (err) {
