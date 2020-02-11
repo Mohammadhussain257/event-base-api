@@ -36,6 +36,7 @@ eventController.route('/event/add').post(upload.single('eventImage'),(req, res)=
         eventName: req.body.eventName,
         eventDescription: req.body.eventDescription,
         date: req.body.date,
+        eventLocation:req.body.eventLocation,
         Organizer_ID: req.body.Organizer_ID
     });
     newEvent.save().then((newEvent) => {
@@ -76,7 +77,8 @@ eventController.route('/event/:eventId/organizer/:organizerId')
                     eventImage: req.file.filename,
                     eventName: req.body.eventName,
                     eventDescription: req.body.eventDescription,
-                    date: req.body.date
+                    date: req.body.date,
+                    eventLocation:req.body.eventLocation
                 }).then(() => {
                     res.send({ message: 'updated'})
                 })

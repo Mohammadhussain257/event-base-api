@@ -28,6 +28,10 @@ let Events = new Schema({
         type: String,
         default: null,
     },
+    eventLocation: {
+        type: String,
+        default: null,
+    },
     Organizer_ID:{
         type:Number
     }
